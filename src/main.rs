@@ -6,7 +6,8 @@ use r2d2_diesel::ConnectionManager;
 //use tokio_postgres::Connection;
 use diesel::pg::PgConnection;
 use tonic::{transport::Server, Request, Response, Status};
-
+pub mod schema;
+pub mod models;
 pub mod chats {
     tonic::include_proto!("chats");
 }
