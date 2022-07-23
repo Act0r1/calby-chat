@@ -23,7 +23,7 @@ message GroupSettings {
     bytes avatar = 7;
     string users = 8;
     bool open = 9;
-    optional string desc = 10;
+    optional string description = 10;
 }
 
 message MsgForEdit {
