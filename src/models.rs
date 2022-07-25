@@ -54,21 +54,6 @@ pub struct NewChat {
 }
 
 
-impl FromSql<Jsonb, Pg> for NewChat {
-    fn from_sql() {}
-}
-
-
-
-
-impl ToSql<Jsonb, Pg> for NewChat {
-    fn to_sql() {}
-}
-
-
-
-
-
-
-
-
+//impl FromSql<Vec<T>, Pg>  for Vec<String> {
+//    fn from_sql() {}
+//}
