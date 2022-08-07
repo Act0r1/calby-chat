@@ -1,29 +1,28 @@
 syntax = "proto3";
-package chats;
+package chat;
 
 
-service Chats {
-    rpc CreateGroup(GroupSettings) returns (ResponseGroup );
+service Chat {
+    rpc CreateGroup(GroupSettings) returns ( ResponseGroup );
     rpc SendMessage(Message) returns (ResponseMessage);
     rpc deleteMessage(MsgForDel) returns (ResponseMessage);
     rpc editMessage(MsgForEdit) returns (ResponseMessage);
 }
+
 
 // message ChannelSettings {}
 // message PrivateSettings {}
 
 
 message GroupSettings {
-    int32 id = 1;
-    int32 room  = 2;
-    string creator = 3;
-    string displayed_name = 4;
-    string short_name = 5;
-    string chat_type = 6;
-    bytes avatar = 7;
-    string users = 8;
-    bool open = 9;
-    optional string description = 10;
+    string creator = 1;
+    string displayed_name = 2;
+    string short_name = 3;
+    string chat_type = 4;
+    string avatar = 5;
+    string users = 6;
+    bool open = 7;
+    string description = 8;
 }
 
 message MsgForEdit {
@@ -54,9 +53,8 @@ message Message{
 }
 
 message ResponseGroup {
-    string uuid = 1;
-    string error = 2;
-    uint32 status = 3;
+    string error = 1;
+    uint32 status = 2;
 }
 
 message ResponseMessage {

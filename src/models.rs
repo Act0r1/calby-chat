@@ -1,12 +1,10 @@
 use diesel::pg::Pg;
-use diesel::types::{FromSql,ToSql};
 use serde::{Deserialize, Serialize};
 extern crate serde_json;
-use crate::schema::{chats, messages};
-use diesel::sql_types::Jsonb;
+use crate::schema::{chats};
 use diesel::Insertable;
 #[derive( Queryable, PartialEq, Debug, Deserialize, Serialize)]
-pub struct Chats{
+pub struct Chats {
    pub chat_id: i64,
    pub room: i64,
    pub creator: String,
@@ -27,12 +25,16 @@ pub struct Messages {
     pub who_read: String,
 }
 
+
+// #[derive(Debug,FromSqlRow, Insertable, Serialize, Deserialize)]
+// pub struct GroupV
 #[derive(Debug,FromSqlRow, Insertable, Serialize, Deserialize)]
 #[table_name="chats"]
 #[diesel(sql_type = "Jsonb")]
 pub struct NewGroup {
    pub creator: String,
    pub displayed_name: String,
+   pub short_name: String,
    pub chat_type: String,
    pub avatar: String,
    pub users: Vec<String>,

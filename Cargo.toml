@@ -20,3 +20,10 @@ bb8-postgres = "0.7"
 dotenv = "0.15.0"
 [build-dependencies]
 tonic-build = "0.7"
+
+[[bin]]
+name = "chats-client"
+path = "src/client.rs"
+[[bin]]
+name = "chats-server"
+path = "src/main.rs"
