@@ -1,9 +1,10 @@
-use diesel::pg::Pg;
-use serde::{Deserialize, Serialize};
 extern crate serde_json;
-use crate::schema::{chats};
-use diesel::Insertable;
-#[derive( Queryable, PartialEq, Debug, Deserialize, Serialize)]
+use serde::{Deserialize, Serialize};
+use crate::schema::{chat, messages};
+use diesel::{Insertable, Identifiable};
+#[derive(Identifiable,Queryable, PartialEq, Debug, Deserialize, Serialize)]
+#[primary_key(chat_id)]
+#[table_name="chat"]
 pub struct Chats {
    pub chat_id: i64,
    pub room: i64,
@@ -15,22 +16,33 @@ pub struct Chats {
    pub open: bool,
    pub description: String,
 }
-#[derive(Queryable, Associations, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, Insertable, Associations,Debug)]
+#[table_name="messages"]
+#[belongs_to(Chats, foreign_key="chat_id")]
 pub struct Messages {
-    pub id: i64,
-    pub author: String,
-    pub content: String,
-    pub time: String,
-    pub who_received: String,
-    pub who_read: String,
+   pub chat_id: i64,
+   pub author: String,
+   pub content: String,
+   pub time:i64,
+   pub who_received: String,
+   pub who_read: String,
 }
 
+// #[derive(Insertable, FromSqlRow, Serialize, Deserialize,Debug)]
+// // #[primary_key(chat_id)]
+// #[table_name="messages"]
+// pub struct Msg {
+//    pub chat_id: i64,
+//    pub author: String,
+//    pub content: String,
+//    pub time:i64,
+//    pub who_received: String,
+//    pub who_read: String,
+// }
 
-// #[derive(Debug,FromSqlRow, Insertable, Serialize, Deserialize)]
-// pub struct GroupV
 #[derive(Debug,FromSqlRow, Insertable, Serialize, Deserialize)]
-#[table_name="chats"]
-#[diesel(sql_type = "Jsonb")]
+#[table_name="chat"]
+// #[diesel(sql_type = "Jsonb")]
 pub struct NewGroup {
    pub creator: String,
    pub displayed_name: String,
@@ -41,9 +53,9 @@ pub struct NewGroup {
    pub open: bool,
    pub description: String,
 }
-
+//
 #[derive(Debug, AsExpression,FromSqlRow, Insertable, Serialize, Deserialize)]
-#[table_name="chats"]
+#[table_name="chat"]
 #[diesel(sql_type = "Jsonb")]
 pub struct NewChat {
    pub creator: String,
@@ -55,7 +67,11 @@ pub struct NewChat {
    pub description: String,
 }
 
-
-//impl FromSql<Vec<T>, Pg>  for Vec<String> {
-//    fn from_sql() {}
-//}
+#[derive(Debug, AsExpression,FromSqlRow, Insertable, Serialize, Deserialize)]
+#[table_name="messages"]
+pub struct EditMsg {
+   pub chat_id: i64,
+   pub author: String,
+   pub msg_id: i64,
+   pub content: String,
+}
