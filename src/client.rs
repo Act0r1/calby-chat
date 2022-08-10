@@ -30,10 +30,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         who_read:"asdasd".into(),
         who_received:"all".into()
     });
-
+    let request3 = Request::new(Message{
+        chat_id:1,
+        content:"Hello Insaf, content change??".into(),
+        author:"Act0r".into(),
+        time:111111,
+        who_read:"asdasd".into(),
+        who_received:"all".into()
+    });
+    let response3 = client.edit_message(request3).await?;
     let response = client.create_group(request).await?;
     let response2 = client.send_message(request2).await?;
-    info!("RESPONSE={:?}", response);
-    info!("RESPONSE={:?}", response2);
+    println!("RESPONSE={:?}", response);
+    println!("Response={:?}", response3);
+    println!("RESPONSE={:?}", response2);
     Ok(())
 }

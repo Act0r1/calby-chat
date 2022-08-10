@@ -5,8 +5,8 @@ import "google/protobuf/timestamp.proto";
 service CalbyChat {
     rpc CreateGroup(GroupSettings) returns ( ResponseGroup );
     rpc SendMessage(Message) returns (ResponseMessage);
-    rpc deleteMessage(MsgForDel) returns (ResponseMessage);
-    rpc editMessage(MsgForEdit) returns (ResponseMessage);
+    rpc deleteMessage(Message) returns (ResponseMessage);
+    rpc editMessage(Message) returns (ResponseMessage);
 }
 
 
@@ -25,13 +25,6 @@ message GroupSettings {
     string description = 8;
 }
 
-message MsgForEdit {
-    int64 chat_id = 1;
-    string author = 2;
-    int32 msgId = 3;
-    // we just replace in our db old message for new, so we don't store deleted and old message which edited
-    string msgForReplace = 4;
-}
 
 message MsgForDel {
     int64 chat_id = 1;

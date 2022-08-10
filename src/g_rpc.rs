@@ -1,18 +1,13 @@
 use diesel::prelude::*;
-use std::time::SystemTime;
-use prost_types::Timestamp;
-use chrono::{DateTime, Utc, NaiveDateTime};
 // use crate::models::Message;
 use crate::{models::*, schema::*};
-use diesel::pg::PgConnection;
 use tonic::{transport::Server, Request, Response, Status};
 pub mod calby_chat {
     tonic::include_proto!("calby_chat");
 }
-use tonic::Code;
 // methods from proto
 use self::calby_chat::{
-    calby_chat_server::CalbyChat, GroupSettings, Message, MsgForDel, MsgForEdit, ResponseMessage,ResponseGroup,
+    calby_chat_server::CalbyChat, GroupSettings, Message,ResponseMessage,ResponseGroup,
 };
 /// Структура, содержащая данные нашего микросервиса.
 #[derive(Clone)]
@@ -78,14 +73,36 @@ impl CalbyChat for ChatService {
 
     async fn edit_message(
         &self,
-        request: Request<MsgForEdit>,
+        request: Request<Message>,
     ) -> Result<Response<ResponseMessage>, Status> {
-        unimplemented!();
+        let reply = ResponseMessage{
+            status:true };
+        use crate::schema::messages;
+        // let dt = DateTime:: 
+        let conn = self.db.get().await.unwrap();
+        let Message {
+            chat_id,
+            author:_,
+            content,
+            // this is 'weird' way to convert prost_types::Timestamp for NaiveDateTime
+            // time:NaiveDateTime::from_timestamp(0,time.unwrap_or_default().nanos as u32),
+            time,
+            who_received,
+            who_read,
+        } = request.into_inner();
+        diesel::update(messages::table.filter(messages::chat_id.eq(&chat_id)))
+            .set((messages::content.eq(content), 
+                    messages::time.eq(time), 
+                    messages::who_read.eq(who_read),
+                    messages::who_received.eq(who_received)))
+            .execute(&*conn)
+            .unwrap();
+        Ok(Response::new(reply))
     }
 
     async fn delete_message(
         &self,
-        request: Request<MsgForDel>,
+        request: Request<Message>,
     ) -> Result<Response<ResponseMessage>, Status> {
         unimplemented!();
     }
