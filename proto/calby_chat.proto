@@ -20,7 +20,7 @@ message GroupSettings {
     string short_name = 3;
     string chat_type = 4;
     string avatar = 5;
-    string users = 6;
+    repeated int32 users = 6;
     bool open = 7;
     string description = 8;
 }
@@ -39,8 +39,8 @@ message Message{
     string author = 2;
     string content = 3;
     int64 time = 4;
-    string who_received = 5;
-    string who_read = 6;
+    repeated int32 who_received = 5;
+    repeated int32 who_read = 6;
 }
 
 message ResponseGroup {

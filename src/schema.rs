@@ -7,7 +7,7 @@ table! {
         short_name -> Varchar,
         chat_type -> Varchar,
         avatar -> Text,
-        users -> Array<Text>,
+        users -> Array<Int4>,
         open -> Nullable<Bool>,
         description -> Nullable<Text>,
     }
@@ -20,8 +20,8 @@ table! {
         content -> Text,
         author -> Varchar,
         time -> Int8,
-        who_received -> Text,
-        who_read -> Text,
+        who_received -> Nullable<Array<Int4>>,
+        who_read -> Nullable<Array<Int4>>,
     }
 }
 

@@ -1,4 +1,4 @@
-use diesel::prelude::*;
+use diesel::{prelude::*, types::ToSql, sql_types::Integer, pg::Pg};
 // use crate::models::Message;
 use crate::{models::*, schema::*};
 use tonic::{transport::Server, Request, Response, Status};
@@ -14,6 +14,7 @@ use self::calby_chat::{
 pub struct ChatService {
   pub db: bb8::Pool<bb8_diesel::DieselConnectionManager<diesel::pg::PgConnection>>,
 }
+
 #[tonic::async_trait]
 impl CalbyChat for ChatService {
     // create db connection
@@ -33,12 +34,12 @@ impl CalbyChat for ChatService {
         short_name,
         chat_type,
         avatar,
-        users:vec![users],
+        users,
         open,
         description,
     };
     diesel::insert_into(chat::table)
-    .values(&new_group)
+    .values(new_group)
     .execute(&*conn)
     .unwrap();   
     Ok(Response::new(reply))
@@ -104,7 +105,46 @@ impl CalbyChat for ChatService {
         &self,
         request: Request<Message>,
     ) -> Result<Response<ResponseMessage>, Status> {
-        unimplemented!();
+        let reply = ResponseMessage{
+            status:true };
+        use crate::schema::messages;
+        // let dt = DateTime:: 
+        let conn = self.db.get().await.unwrap();
+        let Message {
+            chat_id,
+            author,
+            content,
+            time,
+            who_received,
+            who_read,
+        } = request.into_inner();
+        // let msg = Messages {
+        //     chat_id,
+        //     author,
+        //     content,
+        //     // this is 'weird' way to convert prost_types::Timestamp for NaiveDateTime
+        //     // time:NaiveDateTime::from_timestamp(0,time.unwrap_or_default().nanos as u32),
+        //     time,
+        //     who_received,
+        //     who_read,
+        // };
+        // let source = messages::table
+        //     .filter(messages::author.eq(&author))
+        //     .load(&*conn);
+        diesel::delete(messages::table
+            .filter(messages::chat_id.eq(&chat_id))
+            .filter(messages::author.eq(&author)))
+            .filter(messages::content.eq(&content))
+            .execute(&*conn)
+            .unwrap();
+        // diesel::delete(messages::table
+        //     .filter(chat_id.eq(&chat_id))
+        //     .filter(content.eq(&content))
+        //
+        //     ) 
+        //             
+        // .execute(&*conn)
+        // .unwrap();
+        Ok(Response::new(reply))
     }
 }
-
