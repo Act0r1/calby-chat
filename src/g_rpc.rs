@@ -114,9 +114,9 @@ impl CalbyChat for ChatService {
             chat_id,
             author,
             content,
-            time,
-            who_received,
-            who_read,
+            time:_,
+            who_received:_,
+            who_read:_,
         } = request.into_inner();
         // let msg = Messages {
         //     chat_id,
