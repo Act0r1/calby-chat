@@ -12,7 +12,6 @@ pub mod calby_chat {
     tonic::include_proto!("calby_chat");
 }
 
-
 type MResult<T> = Result<T, Box<dyn std::error::Error>>;
 #[tokio::main]
 async fn main() -> MResult<()>{

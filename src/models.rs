@@ -28,18 +28,6 @@ pub struct Messages {
    pub who_read: Vec<i32>,
 }
 
-// #[derive(Insertable, FromSqlRow, Serialize, Deserialize,Debug)]
-// // #[primary_key(chat_id)]
-// #[table_name="messages"]
-// pub struct Msg {
-//    pub chat_id: i64,
-//    pub author: String,
-//    pub content: String,
-//    pub time:i64,
-//    pub who_received: String,
-//    pub who_read: String,
-// }
-
 #[derive(Debug,FromSqlRow, Insertable, Serialize, Deserialize)]
 #[table_name="chat"]
 // #[diesel(sql_type = "Jsonb")]
@@ -53,25 +41,3 @@ pub struct NewGroup {
    pub open: bool,
    pub description: String,
 }
-//
-// #[derive(Debug, AsExpression,FromSqlRow, Insertable, Serialize, Deserialize)]
-// #[table_name="chat"]
-// #[diesel(sql_type = "Jsonb")]
-// pub struct NewChat {
-//    pub creator: String,
-//    pub displayed_name: String,
-//    pub chat_type: String,
-//    pub avatar: String,
-//    pub users: Vec<String>,
-//    pub open: bool,
-//    pub description: String,
-// }
-//
-// #[derive(Debug, AsExpression,FromSqlRow, Insertable, Serialize, Deserialize)]
-// #[table_name="messages"]
-// pub struct EditMsg {
-//    pub chat_id: i64,
-//    pub author: String,
-//    pub msg_id: i64,
-//    pub content: String,
-// }
